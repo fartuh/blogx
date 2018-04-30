@@ -1,0 +1,36 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: whitesmoke;
+}
+
+.form__input-text {
+    width: 150px;
+    padding: 1%;
+}
+
+.container  {
+    width: 450px;
+    height: 500px;
+    background-color: #182134;
+    margin: 250px auto 0 auto;
+}
+
+.form {
+    text-align: center;
+    padding-top: 100px;
+}
+
+.form__label {
+    color: white;
+}
+
+.form__input-submit {
+    margin-top: 10px;
+    padding: 2%;
+    background-color: whitesmoke;
+    border: 1px solid green;
+}
