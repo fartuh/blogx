@@ -44,13 +44,13 @@ if(isset($_POST['name']) && isset($_POST['db']) && isset($_POST['user']) && isse
             <input name="name" id="name" class="form__input-text" value="<?php if(isset($_SESSION['name'])) echo $_SESSION['name'] ?>" type="text"><br/>
 
             <label class="form__label" for="db">Название базы данных</label><br/>
-            <input name="db" id="db" class="form__input-text" value="<?php if(isset($_SESSION['name'])) echo $_SESSION['db'] ?>" type="text"><br/>
+            <input name="db" id="db" class="form__input-text" value="<?php if(isset($_SESSION['db'])) echo $_SESSION['db'] ?>" type="text"><br/>
 
             <label class="form__label" for="user">Имя пользователя БД</label><br/>
-            <input name="user" id="user" class="form__input-text" value="<?php if(isset($_SESSION['name'])) echo $_SESSION['user'] ?>" type="text"><br/>
+            <input name="user" id="user" class="form__input-text" value="<?php if(isset($_SESSION['user'])) echo $_SESSION['user'] ?>" type="text"><br/>
 
             <label class="form__label" for="pass">Пароль пользователя БД</label><br/>
-            <input name="pass" id="pass" class="form__input-text" value="<?php if(isset($_SESSION['name'])) echo $_SESSION['pass'] ?>" type="text"><br/>
+            <input name="pass" id="pass" class="form__input-text" value="<?php if(isset($_SESSION['pass'])) echo $_SESSION['pass'] ?>" type="text"><br/>
 
             <label class="form__label" for="host">Host базы данных</label><br/>
             <input name="host" id="host" class="form__input-text" value="localhost" type="text"><br/>

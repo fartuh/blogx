@@ -10,7 +10,7 @@ use CMS\DB;
 
 $dsn = "mysql:host=$host;dbname=$db;charset=utf8";
 try{
-    DB::getDB($dsn, $user, $pass);
+    DB::connectDB($dsn, $user, $pass);
 }
 catch(PDOException $e)
 {
@@ -18,3 +18,18 @@ catch(PDOException $e)
     echo "<a href='index.php'>Изменить данные</a>";
     die();
 }
+
+$_SESSION['step'] = 'login';
+
+$f = fopen('../config.php', 'w');
+fwrite($f, '<?php 
+');
+fwrite($f, 'return [ 
+');
+fwrite($f, "'user' => '$user', \n");
+fwrite($f, "'pass' => '$pass', \n");
+fwrite($f, "'host' => '$host', \n");
+fwrite($f, "'db' => '$db' \n");
+fwrite($f, ']');
+
+fclose($f);
