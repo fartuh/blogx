@@ -14,8 +14,9 @@ try{
 }
 catch(PDOException $e)
 {
-    echo $e->getMessage() . "<br />";
+    echo 'Произошла ошибка: ' . $e->getMessage() . "<br/>";
     echo "<a href='index.php'>Изменить данные</a>";
+    if(file_exists('../config.php')) unlink('../config.php');
     die();
 }
 
@@ -46,6 +47,22 @@ try{
 
 }
 catch(PDOException $e){
-    echo 'Произошла ошибка:' . $e->getMessage();
+    echo 'Произошла ошибка: ' . $e->getMessage() . "<br/>";
+    echo "<a href='index.php'>Изменить данные</a>";
+    if(file_exists('../config.php')) unlink('../config.php');
     die();
 }
+
+try{
+    $table_options = $pdo->prepare("CREATE TABLE `options` ( `id` INT NOT NULL AUTO_INCREMENT , `key` VARCHAR(255) NOT NULL , `value` VARCHAR(255) NOT NULL , PRIMARY KEY (`id`) ) ENGINE = InnoDB");
+    $bool_2 = $table_options->execute();
+    if(!$bool_2) throw new PDOException('Невозможно создать таблицу users в базе данных');
+}
+catch(PDOException $e){
+    echo 'Произошла ошибка: ' . $e->getMessage() . "<br/>";
+    echo "<a href='index.php'>Изменить данные</a>";
+    if(file_exists('../config.php')) unlink('../config.php');
+    die();
+}
+
+$_SESSION['step'] = 'login';
