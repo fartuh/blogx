@@ -33,3 +33,19 @@ fwrite($f, "'db' => '$db' \n");
 fwrite($f, ']');
 
 fclose($f);
+
+try{
+    $pdo = DB::getDB();
+
+    $table_users = $pdo->prepare(
+    "CREATE TABLE `users` ( `id` INT NOT NULL AUTO_INCREMENT , `login` VARCHAR(100) NOT NULL , `password` VARCHAR(100) NOT NULL , `access` INT NOT NULL DEFAULT '2' , PRIMARY KEY (`id`), UNIQUE (`login`) ) ENGINE = InnoDB");
+
+    $bool = $table_users->execute();
+
+    if(!$bool) throw new PDOException('Невозможно создать таблицу users в базе данных');
+
+}
+catch(PDOException $e){
+    echo 'Произошла ошибка:' . $e->getMessage();
+    die();
+}
