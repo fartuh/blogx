@@ -40,7 +40,7 @@ if(isset($_POST['name']) && isset($_POST['db']) && isset($_POST['user']) && isse
 <body>
     <div class="container">
         <form class="form" method="POST" action="">
-            <label class="form__label" for="name">Название вашей игры</label><br/>
+            <label class="form__label" for="name">Название вашего сайта</label><br/>
             <input name="name" id="name" class="form__input-text" value="<?php if(isset($_SESSION['name'])) echo $_SESSION['name'] ?>" type="text"><br/>
 
             <label class="form__label" for="db">Название базы данных</label><br/>

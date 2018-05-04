@@ -27,11 +27,12 @@ fwrite($f, '<?php
 ');
 fwrite($f, 'return [ 
 ');
+fwrite($f, "'name' => '$name', \n");
 fwrite($f, "'user' => '$user', \n");
 fwrite($f, "'pass' => '$pass', \n");
 fwrite($f, "'host' => '$host', \n");
 fwrite($f, "'db' => '$db' \n");
-fwrite($f, ']');
+fwrite($f, '];');
 
 fclose($f);
 
@@ -39,7 +40,7 @@ try{
     $pdo = DB::getDB();
 
     $table_users = $pdo->prepare(
-    "CREATE TABLE `users` ( `id` INT NOT NULL AUTO_INCREMENT , `login` VARCHAR(100) NOT NULL , `password` VARCHAR(100) NOT NULL , `access` INT NOT NULL DEFAULT '2' , PRIMARY KEY (`id`), UNIQUE (`login`) ) ENGINE = InnoDB");
+    "CREATE TABLE `users` ( `id` INT NOT NULL AUTO_INCREMENT , `login` VARCHAR(100) NOT NULL , `password` VARCHAR(100) NOT NULL , `access` INT NOT NULL DEFAULT '0' , PRIMARY KEY (`id`), UNIQUE (`login`) ) ENGINE = InnoDB");
 
     $bool = $table_users->execute();
 

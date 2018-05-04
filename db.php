@@ -5,18 +5,16 @@ namespace CMS;
 class DB
 {
 
-    private static $db = null;
+    private static $db;
 
     public static function connectDB($dsn, $user, $pass)
     {
         try{
-            $db = self::$db;
             self::$db = new \PDO($dsn, $user, $pass);
         } catch(PDOException $e){
-            self::$db = $db;
-            return $e->getMessage();
+            echo $e->getMessage();
+            return;
         }
-
         return self::$db;
     }
 

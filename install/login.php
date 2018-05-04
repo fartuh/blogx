@@ -13,6 +13,7 @@ if(isset($_POST['login']) && isset($_POST['user_pass'])){
     $_SESSION['user_pass'] = $user_pass;
 
     if($login != '' && $user_pass != ''){
+        $settings = require('../config.php');
         require_once('reg.php');
         header("Location: ../index.php");
     }
