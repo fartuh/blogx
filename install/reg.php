@@ -45,7 +45,7 @@ try{
 
     $stmt = $pdo->prepare("INSERT INTO `pages`(title, text, author_id) VALUES(?,?,1)");
 
-    $stmt->execute(['$settings["name"]', 'Это главная страница вашего сайта. Редактировать её содержание вы можете перейдя в <a href="/admin">админ-панель</a>']);
+    $stmt->execute([$settings["name"], 'Это главная страница вашего сайта. Редактировать её содержание вы можете перейдя в <a href="admin/">админ-панель</a>']);
 }
 catch(PDOException $e){
     echo 'Произошла ошибка: ' . $e->getMessage() . "<br/>";
