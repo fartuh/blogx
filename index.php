@@ -14,6 +14,7 @@ define('MODULES', ROOT . 'modules/');
 define('TESTS', ROOT . 'tests/');
 define('THEMES', ROOT . 'contents/themes/');
 
+if(!isset($_GET['page'])) $_GET['page'] = '/';
 $page = $_GET['page'];
 $check = false;
 $settings = require(ROOT . 'config.php');

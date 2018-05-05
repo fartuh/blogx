@@ -2,7 +2,7 @@
 
 use CMS\DB;
 
-function get_title($page_id = 1, $settings = []){
+function connectDB($settings){
     $host = $settings['host'];
     $db = $settings['db'];
 
@@ -14,6 +14,12 @@ function get_title($page_id = 1, $settings = []){
     catch(PDOException $e)
     {
     }
+}
+/*
+ * function that return site's title
+ */
+function get_title($page_id = 1, $settings = []){
+    connectDB($settings);
 
     $pdo = DB::getDB();
     
@@ -23,18 +29,11 @@ function get_title($page_id = 1, $settings = []){
 
 }
 
+/*
+ * function that return site's text
+ */
 function get_text($page_id = 1, $settings = []){
-    $host = $settings['host'];
-    $db = $settings['db'];
-
-    $dsn = "mysql:host=$host;dbname=$db;charset=utf8";
-    try{
-        DB::connectDB($dsn, $settings['user'], $settings['pass']);
-    }
-
-    catch(PDOException $e)
-    {
-    }
+    connectDB($settings);
 
     $pdo = DB::getDB();
     
@@ -45,18 +44,11 @@ function get_text($page_id = 1, $settings = []){
 
 }
 
+/*
+ * function that return author's data
+ */
 function get_author($page_id = 1, $settings = []){
-    $host = $settings['host'];
-    $db = $settings['db'];
-
-    $dsn = "mysql:host=$host;dbname=$db;charset=utf8";
-    try{
-        DB::connectDB($dsn, $settings['user'], $settings['pass']);
-    }
-
-    catch(PDOException $e)
-    {
-    }
+    connectDB($settings);
 
     $pdo = DB::getDB();
     
