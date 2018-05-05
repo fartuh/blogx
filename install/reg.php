@@ -9,28 +9,16 @@ require('../functions.php');
 
 use CMS\DB;
 
-print_r($settings);
-
 $host = $settings['host'];
 $db = $settings['db'];
 
-$dsn = "mysql:host=$host;dbname=$db;charset=utf8";
-try{
-    DB::connectDB($dsn, $settings['user'], $settings['pass']);
-}
-catch(PDOException $e)
-{
-    echo 'Произошла ошибка: ' . $e->getMessage() . "<br/>";
-    echo "<a href='index.php'>Изменить данные</a>";
-    if(file_exists('../config.php')) unlink('../config.php');
-    die();
-}
+connectDB($settings);
 
 //make a admin account
 try{
     $pdo = DB::getDB();
 
-    $stmt = $pdo->prepare("INSERT INTO `users`(login, password, access) VALUES(?,?,1)");
+    $stmt = $pdo->prepare("INSERT INTO `users`(login, password, access) VALUES(?,?,'admin')");
 
     $stmt->execute([$login, cr($user_pass)]);
 }
@@ -44,9 +32,12 @@ catch(PDOException $e){
 try{
     $pdo = DB::getDB();
 
+    $name = get_option('name', $settings);
+
     $stmt = $pdo->prepare("INSERT INTO `pages`(title, text, author_id) VALUES(?,?,1)");
 
-    $stmt->execute([$settings["name"], 'Это главная страница вашего сайта. Редактировать её содержание вы можете авторизовавшись в аккаунт администратора <a href="login">здесь</a>']);
+    
+    $stmt->execute([$name, 'Это главная страница вашего сайта. Редактировать её содержание вы можете авторизовавшись в аккаунт администратора <a href="login">здесь</a>']);
 }
 catch(PDOException $e){
     echo 'Произошла ошибка: ' . $e->getMessage() . "<br/>";

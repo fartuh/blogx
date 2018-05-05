@@ -5,6 +5,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
 require('../db.php');
+require('../functions.php');
 
 use CMS\DB;
 
@@ -20,14 +21,11 @@ catch(PDOException $e)
     die();
 }
 
-$_SESSION['step'] = 'login';
-
 $f = fopen('../config.php', 'w');
 fwrite($f, '<?php 
 ');
 fwrite($f, 'return [ 
 ');
-fwrite($f, "'name' => '$name', \n");
 fwrite($f, "'user' => '$user', \n");
 fwrite($f, "'pass' => '$pass', \n");
 fwrite($f, "'host' => '$host', \n");
@@ -36,12 +34,13 @@ fwrite($f, '];');
 
 fclose($f);
 
+$settings = require('../config.php');
 //make the table users
 try{
     $pdo = DB::getDB();
 
     $table_users = $pdo->prepare(
-    "CREATE TABLE `users` ( `id` INT NOT NULL AUTO_INCREMENT , `login` VARCHAR(100) NOT NULL , `password` VARCHAR(100) NOT NULL , `access` INT NOT NULL DEFAULT '0' , PRIMARY KEY (`id`), UNIQUE (`login`) ) ENGINE = InnoDB");
+    "CREATE TABLE `users` ( `id` INT NOT NULL AUTO_INCREMENT , `login` VARCHAR(100) NOT NULL , `password` VARCHAR(100) NOT NULL , `access` varchar(30) NOT NULL DEFAULT 'user' , PRIMARY KEY (`id`), UNIQUE (`login`) ) ENGINE = InnoDB");
 
     $bool = $table_users->execute();
 
@@ -59,7 +58,7 @@ catch(PDOException $e){
 try{
     $table_options = $pdo->prepare("CREATE TABLE `options` ( `id` INT NOT NULL AUTO_INCREMENT , `key` VARCHAR(255) NOT NULL , `value` VARCHAR(255) NOT NULL , PRIMARY KEY (`id`) ) ENGINE = InnoDB");
     $bool_2 = $table_options->execute();
-    if(!$bool_2) throw new PDOException('Невозможно создать таблицу users в базе данных');
+    if(!$bool_2) throw new PDOException('Невозможно создать таблицу options в базе данных');
 }
 catch(PDOException $e){
     echo 'Произошла ошибка: ' . $e->getMessage() . "<br/>";
@@ -80,5 +79,7 @@ catch(PDOException $e){
     if(file_exists('../config.php')) unlink('../config.php');
     die();
 }
+
+set_option('name', $name, $settings);
 
 $_SESSION['step'] = 'login';

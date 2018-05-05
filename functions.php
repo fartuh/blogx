@@ -2,6 +2,15 @@
 
 use CMS\DB;
 
+/*
+ *
+ * core's functions
+ *
+ */
+
+/*
+ * connect to db
+ */
 function connectDB($settings){
     $host = $settings['host'];
     $db = $settings['db'];
@@ -16,9 +25,52 @@ function connectDB($settings){
     }
 }
 
+/*
+ * Crypting
+ */
 function cr($string){
     return sha1($string);
 }
+
+function get_option($key, $settings){
+    connectDB($settings);
+
+    $pdo = DB::getDB();
+    try{
+        $stmt = $pdo->prepare("SELECT `value` FROM `options` WHERE `key` = ?");
+        $stmt->execute([$key]);
+    }
+    catch(PDOException $e)
+    {
+    }
+    foreach($stmt as $row){
+        return $row['value'];
+    }
+    return "Опция не найдена";
+}
+
+function set_option($key, $value, $settings){
+    connectDB($settings);
+    $pdo = DB::getDB();
+
+    try{
+        $stmt = $pdo->prepare("INSERT INTO `options` (`id`, `key`, `value`) VALUES (NULL, ?, ?)");
+        $stmt->execute([$key, $value]);
+        return true;
+    }
+    catch(PDOException $e)
+    {
+    }
+
+    return false;
+}
+
+/*
+ *
+ * user's functions
+ *
+ */
+
 /*
  * function that return site's title
  */
@@ -101,4 +153,47 @@ function login_form($settings, $classes=['pass' => '', 'login' => '', 'labels' =
 
         </form>
          ";
+}
+
+function get_user($settings){
+    if(isset($_SESSION['id'])){
+        connectDB($settings);
+
+        $pdo = DB::getDB();
+
+        try{
+            $stmt = $pdo->prepare("SELECT * FROM `users` WHERE id = ?");
+            $stmt->execute([$_SESSION['id']]);
+            foreach($stmt as $row){
+                return new class($row){
+                    public 
+                        $id,
+                        $login,
+                        $access;
+
+                    function __construct($row){
+                        $this->id     = $row['id'];
+                        $this->login  = $row['login'];
+                        $this->access = $row['access'];
+                    }
+                    function __get($name)
+                    {
+                        return "Вызвано несуществующее свойство $name";
+                    }
+
+                    function __toString(){
+                        return 'id=' . $this->id . " login=" . $this->login . " access-lavel=" . $this->access;
+                    }
+
+                };
+            }
+            throw new PDOException('Пользователь не найден');
+        }
+        catch(PDOException $e){
+            return $e->getMessage();
+        }
+
+        return $row;
+    }
+    else header("Location: ../login");
 }
