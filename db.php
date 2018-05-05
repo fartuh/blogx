@@ -12,8 +12,7 @@ class DB
         try{
             self::$db = new \PDO($dsn, $user, $pass);
         } catch(PDOException $e){
-            echo $e->getMessage();
-            return;
+            return $e->getMessage();
         }
         return self::$db;
     }

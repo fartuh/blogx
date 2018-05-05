@@ -6,7 +6,9 @@ ini_set('display_startup_errors', 1);
 
 
 if(!file_exists('config.php')) header('Location: install/index.php');
+//if($_GET['page'] == 'login' || $_GET['page'] == 'login/') header("Location: ../index.php");
 
+session_start();
 
 define('ROOT', getcwd() . '/');
 define('CORE', ROOT . 'core/');
@@ -36,11 +38,24 @@ foreach($routes_file as $routes_string){
     $r = explode('=', trim($routes_string_f));
     $routes[trim($r[0])] = trim($r[1]);
     foreach($routes as $route => $page_id){
-        if($route == $page){
+        if($route == $page || $route . '/' == $page){
+            switch($page_id){
+                case('login'):
+                    require_once('functions.php');
+                    require_once(THEMES . $sets['theme'] . '/login.php');
+                    $check = true;
+                    break(3);
+                case('account'):
+                    require_once('functions.php');
+                    require_once(THEMES . $sets['theme'] . '/account.php');
+                    $check = true;
+                    break(3);
+            }
             $page_id = (int)$page_id;
-            require('functions.php');
-            require(THEMES . $sets['theme'] . '/index.php');
+            require_once('functions.php');
+            require_once(THEMES . $sets['theme'] . '/index.php');
             $check = true;
+            break(2);
         }
 
     }

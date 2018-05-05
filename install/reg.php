@@ -5,6 +5,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
 require('../db.php');
+require('../functions.php');
 
 use CMS\DB;
 
@@ -31,7 +32,7 @@ try{
 
     $stmt = $pdo->prepare("INSERT INTO `users`(login, password, access) VALUES(?,?,1)");
 
-    $stmt->execute([$login, md5($user_pass)]);
+    $stmt->execute([$login, cr($user_pass)]);
 }
 catch(PDOException $e){
     echo 'Произошла ошибка: ' . $e->getMessage() . "<br/>";
@@ -45,7 +46,7 @@ try{
 
     $stmt = $pdo->prepare("INSERT INTO `pages`(title, text, author_id) VALUES(?,?,1)");
 
-    $stmt->execute([$settings["name"], 'Это главная страница вашего сайта. Редактировать её содержание вы можете перейдя в <a href="admin/">админ-панель</a>']);
+    $stmt->execute([$settings["name"], 'Это главная страница вашего сайта. Редактировать её содержание вы можете авторизовавшись в аккаунт администратора <a href="login">здесь</a>']);
 }
 catch(PDOException $e){
     echo 'Произошла ошибка: ' . $e->getMessage() . "<br/>";
