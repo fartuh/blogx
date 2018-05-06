@@ -62,6 +62,7 @@ function set_option($key, $value, $settings){
     {
     }
 
+    unset($pdo);
     return false;
 }
 
@@ -74,13 +75,14 @@ function set_option($key, $value, $settings){
 /*
  * function that return site's title
  */
-function get_title($page_id = 1, $settings = []){
+function get_title($page_id = 1, $settings){
     connectDB($settings);
 
     $pdo = DB::getDB();
     
     $stmt = $pdo->query("SELECT `title` FROM `pages` WHERE id = $page_id");
     $result = $stmt->fetch();
+    unset($pdo);
     return $result['title'];
 
 }
@@ -88,7 +90,7 @@ function get_title($page_id = 1, $settings = []){
 /*
  * function that return site's text
  */
-function get_text($page_id = 1, $settings = []){
+function get_text($page_id = 1, $settings){
     connectDB($settings);
 
     $pdo = DB::getDB();
@@ -96,6 +98,7 @@ function get_text($page_id = 1, $settings = []){
     $stmt = $pdo->query("SELECT `text` FROM `pages` WHERE id = $page_id");
     $result = $stmt->fetch();
     if($result == false) die('error');
+    unset($pdo);
     return $result['text'];
 
 }
@@ -103,14 +106,42 @@ function get_text($page_id = 1, $settings = []){
 /*
  * function that return author's data
  */
-function get_author($page_id = 1, $settings = []){
+function get_author($page_id = 1, $settings){
     connectDB($settings);
 
     $pdo = DB::getDB();
-    
-    //will be sooner
+
+    $stmt = $pdo->prepare("SELECT * FROM `pages` INNER JOIN `users` ON pages.author_id = users.id WHERE pages.id = ?");
+
+    $stmt->execute([$page_id]);
+
+    foreach($stmt as $row){
+        unset($pdo);
+        return new class($row){
+
+            public
+                $login,
+                $id,
+                $access;
+            public function __construct($row){
+                $this->login  = $row['login'];
+                $this->id     = $row['author_id'];
+                $this->access = $row['access'];
+            }
+            
+            function __get($name){
+                return "Вызвано несуществующее свойство: " . $name;
+            }
+        };
+    }
+
+    unset($pdo);
+    return 'Автор не найден';
 }
 
+/*
+ * function that make a login form
+ */
 function login_form($settings, $classes=['pass' => '', 'login' => '', 'labels' => '']){
     if(isset($_SESSION['id'])) header("Location: account/");
     if(isset($_POST['sub']) && isset($_POST['login']) && isset($_POST['pass'])){
@@ -155,6 +186,9 @@ function login_form($settings, $classes=['pass' => '', 'login' => '', 'labels' =
          ";
 }
 
+/*
+ * function that return data of current user
+ */
 function get_user($settings){
     if(isset($_SESSION['id'])){
         connectDB($settings);
@@ -190,10 +224,52 @@ function get_user($settings){
             throw new PDOException('Пользователь не найден');
         }
         catch(PDOException $e){
+            unset($pdo);
             return $e->getMessage();
         }
 
+        unset($pdo);
         return $row;
     }
-    else header("Location: ../login");
+    else {
+        unset($pdo);
+        header("Location: ../login");
+    }
+}
+
+/*
+ * generation of url
+ */
+
+function url($url){
+    return new class($url){
+        private $url, $protocol;
+        function __construct($url){
+            $this->protocol = isset($_SERVER['HTTPS']) ? "https" : "http";        
+            $this->url = $url;
+        }
+        public function __toString(){
+            return "$this->protocol://$_SERVER[HTTP_HOST]/$this->url";           
+        }
+        public function current(){
+            return "$this->protocol://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]$this->url";           
+        }
+    };
+
+}
+
+/*
+ * function that enqueues styles
+ */
+function styles($links = []){
+    $styles = STYLES;
+    if(is_string($links)){
+        echo "<link rel='stylesheet' href='$styles$links'>";
+        return;
+    }
+    foreach($links as $link){
+        echo "<link rel='stylesheet' href='$link'>\n";
+    }
+    return;
+
 }

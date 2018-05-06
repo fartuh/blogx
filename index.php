@@ -28,6 +28,8 @@ foreach($sets_file as $set){
     $sets[trim($set_f[0])] = trim($set_f[1]);
 }
 
+define('STYLES', ROOT . $sets['theme'] . '/assets/css/');
+
 if($page == '') $page = '/';
 
 $routes_file = file('routes.txt');
