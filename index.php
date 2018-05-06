@@ -37,7 +37,9 @@ foreach($routes_file as $routes_string){
     if($routes_string_f == '') continue;
     $r = explode('=', trim($routes_string_f));
     $routes[trim($r[0])] = trim($r[1]);
-    foreach($routes as $route => $page_id){
+    foreach($routes as $route => $page_id_access){
+        $page_arr = explode(":", $page_id_access);
+        $page_id = $page_arr[0];
         if($route == $page || $route . '/' == $page){
             switch($page_id){
                 case('login'):
@@ -50,6 +52,15 @@ foreach($routes_file as $routes_string){
                     require_once(THEMES . $sets['theme'] . '/account.php');
                     $check = true;
                     break(3);
+            }
+            $page_access = $page_arr[1];
+            if($page_access == "auth"){
+                if(!isset($_SESSION['id'])){
+                    require_once('functions.php');
+                    require_once(THEMES . $sets['theme'] . '/login.php');
+                    $check = true;
+                    break(2);
+                }
             }
             $page_id = (int)$page_id;
             require_once('functions.php');

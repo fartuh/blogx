@@ -1,3 +1,4 @@
-/ = 1 
+/ = 1:guest 
 login = login
 account = account
+main = 2:auth
