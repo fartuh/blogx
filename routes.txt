@@ -2,3 +2,4 @@
 login = login
 account = account
 main = 2:auth
+admin = admin

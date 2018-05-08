@@ -158,6 +158,11 @@ function login_form($settings, $classes=['pass' => '', 'login' => '', 'labels' =
             if($row['password'] == $pass){
                 $_SESSION['id'] = $row['id'];
                 //$count_ = 1;
+                if(isset($settings['route'])){
+                    $route = $settings['route'];
+                    header("Location: $route");
+                    die();
+                }
                 header("Location: account/");
             }
         }

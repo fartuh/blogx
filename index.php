@@ -54,10 +54,30 @@ foreach($routes_file as $routes_string){
                     require_once(THEMES . $sets['theme'] . '/account.php');
                     $check = true;
                     break(3);
+                case('admin'):
+                    if(!isset($_SESSION['id'])){
+                        $settings['route'] = $route;
+                        require_once('functions.php');
+                        require_once(THEMES . $sets['theme'] . '/login.php');
+                        $check = true;
+                        break(3);
+                    }
+                    elseif($_SESSION['id'] != 1){
+                        include_once(THEMES . $sets['theme'] . '/404.php');   
+                        $check = true;
+                        break(3);
+                    }
+
+                    require_once('functions.php');
+                    require_once('admin/index.php');
+                    $check = true;
+                    break(3);
+                        
             }
             $page_access = $page_arr[1];
             if($page_access == "auth"){
                 if(!isset($_SESSION['id'])){
+                    $settings['route'] = $route;
                     require_once('functions.php');
                     require_once(THEMES . $sets['theme'] . '/login.php');
                     $check = true;
