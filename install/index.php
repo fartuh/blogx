@@ -6,6 +6,8 @@ if(isset($_SESSION['step']) && $_SESSION['step'] != 'db') header("Location: " . 
 
 $_SESSION['step'] = 'db';
 
+define('CORE', getcwd() . "../../core/");
+
 if(isset($_POST['name']) && isset($_POST['db']) && isset($_POST['user']) && isset($_POST['pass']) && isset($_POST['host'])){
 
     $name = trim($_POST['name']);

@@ -4,6 +4,8 @@ session_start();
 
 if(!isset($_SESSION['step']) || $_SESSION['step'] != 'login') header("Location: index.php");
 
+define('CORE', getcwd() . "../../core/");
+
 if(isset($_POST['login']) && isset($_POST['user_pass'])){
 
     $login = trim($_POST['login']);

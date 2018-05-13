@@ -10,11 +10,7 @@ if(!file_exists('config.php')) header('Location: install/index.php');
 
 session_start();
 
-define('ROOT', getcwd() . '/');
-define('CORE', ROOT . 'core/');
-define('MODULES', ROOT . 'modules/');
-define('TESTS', ROOT . 'tests/');
-define('THEMES', ROOT . 'contents/themes/');
+require('defines.php');
 
 if(!isset($_GET['page'])) $_GET['page'] = '/';
 $page = $_GET['page'];
