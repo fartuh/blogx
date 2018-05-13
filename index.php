@@ -85,7 +85,6 @@ foreach($routes_file as $routes_string){
                     require_once('functions.php');
                     require_once(THEMES . $sets['theme'] . '/login.php');
                     $check = true;
-                    die('1');
                     break(2);
                 }
             }
