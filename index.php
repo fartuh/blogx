@@ -28,7 +28,11 @@ foreach($sets_file as $set){
     $sets[trim($set_f[0])] = trim($set_f[1]);
 }
 
-define('STYLES', ROOT . $sets['theme'] . '/assets/css/');
+//define('STYLES', ROOT . 'contents/themes/' . $sets['theme'] . '/assets/css/');
+
+define('SETTINGS', serialize($settings));
+define('SETS', serialize($sets));
+define('STYLES', "contents/themes/" . $sets['theme'] . "/assets/css/");
 
 if($page == '') $page = '/';
 
@@ -81,10 +85,12 @@ foreach($routes_file as $routes_string){
                     require_once('functions.php');
                     require_once(THEMES . $sets['theme'] . '/login.php');
                     $check = true;
+                    die('1');
                     break(2);
                 }
             }
             $page_id = (int)$page_id;
+            $_SESSION['page_id'] = $page_id;
             require_once('functions.php');
             require_once(THEMES . $sets['theme'] . '/index.php');
             $check = true;

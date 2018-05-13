@@ -1,1 +1,1 @@
-<?php login_form($settings) ?>
+<?php login_form() ?>
